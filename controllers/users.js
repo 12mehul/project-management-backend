@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-const cloudinary = require("../config/cloudinaryConfig");
+const uploadToCloudinary = require("../utils/cloudinaryUpload");
 
 //signup
 const signup = async (req, res) => {
@@ -21,10 +21,7 @@ const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const image = await cloudinary.uploader.upload(file.path, {
-      folder: "img",
-      use_filename: true,
-    });
+    const image = await uploadToCloudinary(file.buffer, "img");
 
     const users = await User.create({
       firstname,
@@ -34,9 +31,9 @@ const signup = async (req, res) => {
       img: image.secure_url,
     });
 
-    return res.status(201).json({ msg: "User created successfully", users });
+    return res.status(201).json({ msg: "User created successfully" });
   } catch (error) {
-    res.status(500).json({ msg: "Internal server error", error });
+    res.status(500).json({ msg: "Internal server error" });
   }
 };
 
