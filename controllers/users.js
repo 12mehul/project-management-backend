@@ -34,9 +34,9 @@ const signup = async (req, res) => {
       img: image.secure_url,
     });
 
-    return res.status(201).json({ msg: "User created successfully" });
+    return res.status(201).json({ msg: "User created successfully", users });
   } catch (error) {
-    res.status(500).json({ msg: "Internal server error" });
+    res.status(500).json({ msg: "Internal server error", error });
   }
 };
 
