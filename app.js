@@ -13,7 +13,10 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "https://project-management-frontend-sigma.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );

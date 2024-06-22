@@ -66,7 +66,20 @@ const login = async (req, res) => {
   }
 };
 
+//profile
+const getProfile = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const user = await User.findById({ _id });
+    const { password, ...data } = user.toJSON();
+    res.send(data);
+  } catch (error) {
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
 module.exports = {
   signup,
   login,
+  getProfile,
 };
