@@ -66,7 +66,56 @@ const login = async (req, res) => {
   }
 };
 
+//profile
+const getProfile = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const user = await User.findById({ _id });
+    const { password, ...data } = user.toJSON();
+    res.send(data);
+  } catch (error) {
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+//update
+const updateProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const file = req.file;
+
+    let updatedFile;
+    if (file) {
+      const image = await uploadToCloudinary(file.buffer, "img");
+      updatedFile = image.secure_url;
+    } else {
+      updatedFile = req.body.img;
+    }
+
+    let hashedPassword;
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      hashedPassword = await bcrypt.hash(req.body.password, salt);
+    }
+
+    const users = await User.findOneAndUpdate(
+      { _id: id },
+      { ...req.body, img: updatedFile, password: hashedPassword },
+      { new: true, runValidators: true }
+    );
+    if (!users) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    return res.status(200).json({ msg: "User updated successfully", users });
+  } catch (error) {
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
 module.exports = {
   signup,
   login,
+  getProfile,
+  updateProfile,
 };

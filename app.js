@@ -5,6 +5,8 @@ const cors = require("cors");
 const app = express();
 
 const users = require("./routes/users");
+const projects = require("./routes/projects");
+const tasks = require("./routes/tasks");
 
 const port = 3001;
 
@@ -13,13 +15,18 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "https://project-management-frontend-sigma.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 
 app.get("/node", (req, res) => res.send("Hello world"));
 app.use("/api/users", users);
+app.use("/api/projects", projects);
+app.use("/api/tasks", tasks);
 
 const startConnection = async () => {
   try {
