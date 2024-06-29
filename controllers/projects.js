@@ -41,7 +41,7 @@ const createProject = async (req, res) => {
       img: image.secure_url,
     });
 
-    return res.status(201).json({ mg: "Project created successfully" });
+    return res.status(201).json({ msg: "Project created successfully" });
   } catch (error) {
     res.status(500).json({ msg: "Internal server error" });
   }
