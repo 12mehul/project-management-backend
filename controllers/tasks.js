@@ -53,7 +53,7 @@ const getTasks = async (req, res) => {
       query.userId = req.query.userId;
     }
 
-    const tasks = await Task.find({ query }).sort({ createdAt: -1 });
+    const tasks = await Task.find(query).sort({ createdAt: -1 });
     return res.status(200).json({ tasks });
   } catch (error) {
     res.status(500).json({ msg: "Internal server error" });
