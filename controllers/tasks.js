@@ -108,10 +108,53 @@ const deleteTask = async (req, res) => {
   }
 };
 
+//status update
+const taskStatusUpdate = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const task = await Task.findByIdAndUpdate(
+      { _id: id },
+      { status },
+      { new: true, runValidators: true }
+    );
+    if (!task) {
+      return res.status(404).json({ msg: "Task not found" });
+    }
+    return res.status(200).json({ msg: "Task status updated successfully" });
+  } catch (error) {
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+//update task comment
+const taskCommentUpdate = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const task = await Task.findById(id);
+    if (!task) {
+      return res.status(404).json({ msg: "Task not found" });
+    }
+
+    // Add new comment to the beginning of the array
+    task.comments.unshift({ name });
+    await task.save();
+    return res
+      .status(200)
+      .json({ msg: "Task comment updated successfully", task });
+  } catch (error) {
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
 module.exports = {
   createTask,
   getTasks,
   singleTask,
   updateTask,
   deleteTask,
+  taskStatusUpdate,
+  taskCommentUpdate,
 };
