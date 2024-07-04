@@ -6,6 +6,8 @@ const {
   singleTask,
   updateTask,
   deleteTask,
+  taskStatusUpdate,
+  taskCommentUpdate,
 } = require("../controllers/tasks");
 
 //create
@@ -18,5 +20,9 @@ router.route("/:id").get(singleTask);
 router.route("/update/:id").put(updateTask);
 //delete
 router.route("/delete/:id").delete(deleteTask);
+//status update
+router.route("/status/:id").put(taskStatusUpdate);
+//update task comment
+router.route("/comment/:id").post(taskCommentUpdate);
 
 module.exports = router;
