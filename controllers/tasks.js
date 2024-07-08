@@ -139,7 +139,7 @@ const taskCommentUpdate = async (req, res) => {
     }
 
     // Add new comment to the beginning of the array
-    task.comments.unshift({ name });
+    task.comments.unshift({ name, createdDate: new Date() });
     await task.save();
     return res
       .status(200)

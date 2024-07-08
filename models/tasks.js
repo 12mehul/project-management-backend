@@ -20,7 +20,12 @@ const TaskSchema = new mongoose.Schema({
   },
   comments: [
     {
-      name: String,
+      name: {
+        type: String,
+      },
+      createdDate: {
+        type: Date,
+      },
     },
   ],
   startDate: {
